@@ -4,9 +4,10 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Instalar dependencias incluyendo devDependencies
+# Instalar TODAS las dependencias (incluye TypeScript)
 RUN npm install
 
+# Copiar el resto del código, sin node_modules
 COPY . .
 
 # Compilar TypeScript
