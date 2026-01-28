@@ -1,7 +1,10 @@
 // backend/src/index.ts
 import type { MiaSucia } from "./contracts/mia-sucia.contract.js";
 import { ingestMidi } from "./dev/midi-ingestor.js";
-import { IAbrow_clasificarNotas, IAbrow_clasificarCapas } from "./departamentoia/IAbrow.js";
+import {
+  IAbrow_clasificarNotas,
+  IAbrow_clasificarCapas
+} from "./departamentoia/IAbrow.js";
 import { construirMiaSucia } from "./dev/constructor-mia-sucia.js";
 import { validarMiaSucia } from "./aduana/aduana-mia-sucia.js";
 import { TransportadorA } from "./teletransportador-A.js";
@@ -12,18 +15,19 @@ export async function procesarMIDI(
 ): Promise<MiaSucia> {
 
   // 1. Normalizar buffer
-  const buffer = midiBuffer instanceof Uint8Array ? midiBuffer : new Uint8Array(midiBuffer);
+  const buffer =
+    midiBuffer instanceof Uint8Array ? midiBuffer : new Uint8Array(midiBuffer);
 
   // 2. Ingesta física
   const { notes, bpm, ppq, duracion } = ingestMidi(buffer);
 
-  // 3. Clasificación superficial IA‑MIA
+  // 3. Clasificación superficial IA‑MIA (roles + tags + validación)
   const notasClasificadas = IAbrow_clasificarNotas(notes);
 
   // 4. Capas constitucionales (BASE / ACOMPANAMIENTO / RUIDO)
   const capas = IAbrow_clasificarCapas(notasClasificadas);
 
-  // 5. Construcción del cubo geográfico vacío
+  // 5. Construcción del cubo geográfico vacío (sin tramos)
   const cubo = construirMiaSucia(capas);
 
   // 6. Adaptar capas → tramos reales
@@ -55,7 +59,7 @@ export async function procesarMIDI(
   // 10. Validación constitucional
   validarMiaSucia(miaSucia);
 
-  // 11. Ministerio Exterior
+  // 11. Ministerio Exterior (salida final)
   const transportador = new TransportadorA();
   return transportador.enviar(miaSucia);
 }
