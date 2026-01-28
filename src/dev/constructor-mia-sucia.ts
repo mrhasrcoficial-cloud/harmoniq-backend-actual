@@ -38,16 +38,16 @@ function convertirNotaATramo(
 export function construirMiaSucia(capas: MiaSuciaCapas): MiaCubo {
   const cubo = crearPlantillaMia();
 
-  for (const n of capas.base) {
+  for (const n of capas.BASE) {
     cubo.capas.BASE.tramos.push(convertirNotaATramo(n, "BASE"));
   }
 
-  for (const n of capas.acompanamiento) {
-    cubo.capas.ACMP.tramos.push(convertirNotaATramo(n, "ACMP"));
+  for (const n of capas.ACOMPANAMIENTO) {
+    cubo.capas.ACOMPANAMIENTO.tramos.push(convertirNotaATramo(n, "ACOMPANAMIENTO"));
   }
 
-  for (const n of capas.ruido) {
-    cubo.capas.TRSH.tramos.push(convertirNotaATramo(n, "TRSH"));
+  for (const n of capas.RUIDO) {
+    cubo.capas.RUIDO.tramos.push(convertirNotaATramo(n, "RUIDO"));
   }
 
   return cubo;

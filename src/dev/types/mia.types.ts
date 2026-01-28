@@ -13,11 +13,12 @@ export type PMSmiaAltura =
   | "IY" | "IZ"
   | "JA" | "JB" | "JC" | "JD" | "JE" | "JF" | "JG" | "JH" | "JI" | "JJ" | "JK" | "JL";
 
-// Capas soberanas del país Backend (alineadas con UI y PMSmia)
+// Capas soberanas del cubo PMSmia
+// SEP1–SEP3 quedan reservadas para expansiones constitucionales
 export type PMSmiaCapa =
-  | "BASE"   // Melodía / voz principal
-  | "ACMP"   // Acompañamiento
-  | "TRSH"   // Ruido / notas descartadas
+  | "BASE"
+  | "ACOMPANAMIENTO"
+  | "RUIDO"
   | "SEP1"
   | "SEP2"
   | "SEP3";
@@ -30,22 +31,21 @@ export type PMSmiaTramo = {
   capa: PMSmiaCapa;
 };
 
-// Capa geográfica dentro del cubo MIA SUCIA v1.0
-export type MiaCapaNombre = "BASE" | "ACMP" | "TRSH";
+// Nombres de capas soberanas del cubo MIA SUCIA v1.0
+export type MiaCapaNombre = "BASE" | "ACOMPANAMIENTO" | "RUIDO";
 
+// Capa geográfica dentro del cubo
 export type MiaCapa = {
   nombre: MiaCapaNombre;
   tramos: PMSmiaTramo[];
 };
 
 // Cubo geográfico completo MIA SUCIA v1.0
-// ⭐ Limpio: solo capas soberanas, sin metadata ni lenguaje
 export type MiaCubo = {
   version: "1.0";
-
   capas: {
     BASE: MiaCapa;
-    ACMP: MiaCapa;
-    TRSH: MiaCapa;
+    ACOMPANAMIENTO: MiaCapa;
+    RUIDO: MiaCapa;
   };
 };

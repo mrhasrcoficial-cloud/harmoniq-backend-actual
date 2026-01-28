@@ -1,7 +1,7 @@
 // ============================================================
 //  backend/src/dev/types/backend.types.ts
 //  Tipos oficiales del país Backend (Constitución 1.4.1)
-//  (Alineado al contrato SUPREMO)
+//  Alineado al contrato SUPREMO y al backend real
 // ============================================================
 
 // ─────────────────────────────────────────────
@@ -30,11 +30,7 @@ export type MiaNotaRol =
 // ─────────────────────────────────────────────
 export interface MiaSuciaNote extends BackendMidiNote {
   role: MiaNotaRol;
-
-  // Etiquetas heurísticas superficiales (permitidas)
-  tags?: string[];
-
-  // Indicadores superficiales (NO cognitivos)
+  tags: string[];
   inScale: boolean;
   valid: boolean;
 }
@@ -43,7 +39,7 @@ export interface MiaSuciaNote extends BackendMidiNote {
 // 4. Capas superficiales previas al cubo
 // ─────────────────────────────────────────────
 export interface MiaSuciaCapas {
-  base: MiaSuciaNote[];
-  acompanamiento: MiaSuciaNote[];
-  ruido: MiaSuciaNote[];
+  BASE: MiaSuciaNote[];
+  ACOMPANAMIENTO: MiaSuciaNote[];
+  RUIDO: MiaSuciaNote[];
 }

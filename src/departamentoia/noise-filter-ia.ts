@@ -1,31 +1,25 @@
 // backend/src/departamentoia/noise-filter-ia.ts
 // -------------------------------------------------------------
-// NoiseFilter-IA — Filtro superficiale costituzionale
+//  NoiseFilter-IA — Filtro superficial constitucional
+//  Versión 1.4.1 (Alineado con MIA SUCIA v1.0)
 // -------------------------------------------------------------
-// Funzioni:
-//   - Rimuovere note fantasma
-//   - Rimuovere note troppo corte
-//   - Rimuovere note fuori range
-//   - Rimuovere duplicati
-//   - Applicare etichette ARKLIM superficiali
-//   - Usare un dizionario IA interno
-//
-// NON usa:
-//   - Chasky
-//   - LIMBoard
-//   - allowedNotes / forbiddenNotes
-//   - energia, tensione, intenzione
-//   - analisi cognitiva
+//  Funciones:
+//    - Remover notas fantasma
+//    - Remover notas demasiado cortas
+//    - Remover notas fuera de rango
+//    - Remover duplicados
+//    - Etiquetado superficial ARKLIM
+//    - NO usa cognición, intención, energía ni análisis profundo
 // -------------------------------------------------------------
 
 import type {
   BackendMidiNote,
   MiaSuciaNote,
   MiaNotaRol
-} from "../dev/types/backend.types.js";   // ← RUTA CORRECTA + .js
+} from "../dev/types/backend.types.js";
 
 // -------------------------------------------------------------
-// Dizionario ARKLIM superficiale (consentito)
+//  Diccionario superficial ARKLIM
 // -------------------------------------------------------------
 const IA_DICTIONARY = {
   tags: {
@@ -39,7 +33,7 @@ const IA_DICTIONARY = {
 };
 
 // -------------------------------------------------------------
-// Configurazione del filtro
+//  Configuración del filtro
 // -------------------------------------------------------------
 export interface NoiseFilterConfig {
   minDuration: number;
@@ -56,13 +50,12 @@ export const DEFAULT_NOISE_FILTER_CONFIG: NoiseFilterConfig = {
 };
 
 // -------------------------------------------------------------
-// Funzione principale
+//  FUNCIÓN PRINCIPAL
 // -------------------------------------------------------------
 export function noiseFilterIA(
   notes: BackendMidiNote[],
   config: NoiseFilterConfig = DEFAULT_NOISE_FILTER_CONFIG
 ): MiaSuciaNote[] {
-
   const result: MiaSuciaNote[] = [];
   const seen = new Set<string>();
 
@@ -70,21 +63,25 @@ export function noiseFilterIA(
     const tags: string[] = [];
     let valid = true;
 
+    // Rango permitido
     if (n.pitch < config.minPitch || n.pitch > config.maxPitch) {
       tags.push(IA_DICTIONARY.tags.OUT_OF_RANGE);
       valid = false;
     }
 
+    // Duración mínima
     if (n.duration < config.minDuration) {
       tags.push(IA_DICTIONARY.tags.SHORT);
       valid = false;
     }
 
+    // Velocidad mínima
     if (n.velocity < config.minVelocity) {
       tags.push(IA_DICTIONARY.tags.LOW_VELOCITY);
       valid = false;
     }
 
+    // Duplicados
     const key = `${n.pitch}-${n.startTime.toFixed(4)}`;
     if (seen.has(key)) {
       tags.push(IA_DICTIONARY.tags.DUPLICATE);
@@ -97,8 +94,10 @@ export function noiseFilterIA(
       tags.push(IA_DICTIONARY.tags.CLEAN);
     }
 
+    // Rol superficial
     const role: MiaNotaRol = valid ? inferRole(n) : "ruido";
 
+    // Construcción soberana MiaSuciaNote
     result.push({
       ...n,
       role,
@@ -112,11 +111,12 @@ export function noiseFilterIA(
 }
 
 // -------------------------------------------------------------
-// Inferenza superficiale del ruolo (non cognitiva)
+//  Inferencia superficial del rol (NO cognitiva)
 // -------------------------------------------------------------
 function inferRole(n: BackendMidiNote): MiaNotaRol {
   const pc = n.pitchClass;
 
+  // ⭐ Corrección crítica: OR lógicos restaurados
   if (pc === 0 || pc === 5 || pc === 7) return "base";
 
   if (n.pitch >= 40 && n.pitch <= 90) return "acompanamiento";

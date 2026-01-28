@@ -15,14 +15,14 @@ export const crearPlantillaMia = (): MiaCubo => ({
       tramos: [], // tramos HA–JL de la capa BASE
     },
 
-    ACMP: {
-      nombre: "ACMP",
-      tramos: [], // tramos HA–JL de acompañamiento
+    ACOMPANAMIENTO: {
+      nombre: "ACOMPANAMIENTO",
+      tramos: [], // tramos HA–JL de la capa ACOMPANAMIENTO
     },
 
-    TRSH: {
-      nombre: "TRSH",
-      tramos: [], // tramos HA–JL clasificados como ruido
+    RUIDO: {
+      nombre: "RUIDO",
+      tramos: [], // tramos HA–JL clasificados como RUIDO
     },
   }
 });

@@ -9,6 +9,11 @@
 //  ✔ NO usa ARKLIM ni CRUZ
 //  ✔ Solo filtra ruido superficial y clasifica roles
 // -------------------------------------------------------------
+//
+//  Produce capas soberanas:
+//      BASE / ACOMPANAMIENTO / RUIDO
+//
+// -------------------------------------------------------------
 
 import type {
   BackendMidiNote,
@@ -29,7 +34,7 @@ export class IAOrchestrator {
     // 2. Clasificación superficial IA‑MIA
     const classified = IAbrow_clasificarNotas(filtered);
 
-    // 3. Capas superficiales (BASE / ACOMP / RUIDO)
+    // 3. Capas soberanas (BASE / ACOMPANAMIENTO / RUIDO)
     return IAbrow_clasificarCapas(classified);
   }
 }

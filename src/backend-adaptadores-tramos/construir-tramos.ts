@@ -2,17 +2,17 @@ import type { MiaSuciaCapas } from "../../src/dev/types/backend.types.js";
 import type { PMSmiaTramo, PMSmiaCapa, PMSmiaAltura } from "../../src/dev/types/mia.types.js";
 import { pitchToHAJL } from "./altura-hajl.js";
 
-// ⭐ Interfaz exportada correctamente
+// ⭐ Interfaz exportada correctamente (idioma soberano)
 export interface MiaCapasTramos {
   BASE: {
     nombre: string;
     tramos: PMSmiaTramo[];
   };
-  ACMP: {
+  ACOMPANAMIENTO: {
     nombre: string;
     tramos: PMSmiaTramo[];
   };
-  TRSH: {
+  RUIDO: {
     nombre: string;
     tramos: PMSmiaTramo[];
   };
@@ -35,13 +35,13 @@ function convertirListaANTramos(lista: any[], capa: PMSmiaCapa): PMSmiaTramo[] {
 }
 
 export function construirTramosDesdeCapas(capas: MiaSuciaCapas): MiaCapasTramos {
-  const baseTramos = convertirListaANTramos(capas.base ?? [], "BASE");
-  const acompTramos = convertirListaANTramos(capas.acompanamiento ?? [], "ACMP");
-  const ruidoTramos = convertirListaANTramos(capas.ruido ?? [], "TRSH");
+  const baseTramos = convertirListaANTramos(capas.BASE ?? [], "BASE");
+  const acompTramos = convertirListaANTramos(capas.ACOMPANAMIENTO ?? [], "ACOMPANAMIENTO");
+  const ruidoTramos = convertirListaANTramos(capas.RUIDO ?? [], "RUIDO");
 
   return {
     BASE: { nombre: "BASE", tramos: baseTramos },
-    ACMP: { nombre: "ACMP", tramos: acompTramos },
-    TRSH: { nombre: "TRSH", tramos: ruidoTramos }
+    ACOMPANAMIENTO: { nombre: "ACOMPANAMIENTO", tramos: acompTramos },
+    RUIDO: { nombre: "RUIDO", tramos: ruidoTramos }
   };
 }

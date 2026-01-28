@@ -55,10 +55,10 @@ function validarCubo(cubo: MiaCubo) {
     throw new Error("Aduana Backend: versión del cubo inválida.");
   }
 
-  // Capas soberanas
+  // Capas soberanas (Constitución 1.4.1)
   validarCapa(cubo.capas.BASE, "BASE");
-  validarCapa(cubo.capas.ACMP, "ACMP");
-  validarCapa(cubo.capas.TRSH, "TRSH");
+  validarCapa(cubo.capas.ACOMPANAMIENTO, "ACOMPANAMIENTO");
+  validarCapa(cubo.capas.RUIDO, "RUIDO");
 }
 
 // Validación de una capa soberana

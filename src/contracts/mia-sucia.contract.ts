@@ -2,16 +2,6 @@
 // -------------------------------------------------------------
 //  CONTRATO MIA SUCIA — Versión 1.0 (Alineado a SUPREMO)
 // -------------------------------------------------------------
-//
-//  Este contrato define la estructura diplomática oficial
-//  que el Backend entrega a SRC y que SUPREMO consume.
-//
-//  ✔ NO hace cognición
-//  ✔ NO interpreta música
-//  ✔ NO transforma MIDI
-//  ✔ NO usa ARKLIM ni CRUZ
-//
-// -------------------------------------------------------------
 
 import type { MiaCubo } from "../dev/types/mia.types.js";
 
@@ -22,7 +12,7 @@ export interface MiaSucia {
   /** Versión del contrato */
   version: "1.0";
 
-  /** Cubo geográfico MIA SUCIA v1.0 (BASE / ACMP / TRSH) */
+  /** Cubo geográfico MIA SUCIA v1.0 (BASE / ACOMPANAMIENTO / RUIDO) */
   cubo: MiaCubo;
 
   /** Metadata física mínima requerida por SUPREMO */
@@ -47,7 +37,7 @@ export function tramoToMidiNote(t: any) {
     velocity: 100,
     trackIndex:
       t.capa === "BASE" ? 0 :
-      t.capa === "ACMP" ? 1 :
+      t.capa === "ACOMPANAMIENTO" ? 1 :
       2,
     channel: 0
   };

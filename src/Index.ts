@@ -10,6 +10,7 @@ import { adaptarCapasATramos } from "./backend-adaptadores-tramos/adaptador-tram
 export async function procesarMIDI(
   midiBuffer: Uint8Array | ArrayBuffer
 ): Promise<MiaSucia> {
+
   // 1. Normalizar buffer
   const buffer = midiBuffer instanceof Uint8Array ? midiBuffer : new Uint8Array(midiBuffer);
 
@@ -19,28 +20,28 @@ export async function procesarMIDI(
   // 3. Clasificación superficial IA‑MIA
   const notasClasificadas = IAbrow_clasificarNotas(notes);
 
-  // 4. Capas constitucionales (por notas)
+  // 4. Capas constitucionales (BASE / ACOMPANAMIENTO / RUIDO)
   const capas = IAbrow_clasificarCapas(notasClasificadas);
 
   // 5. Construcción del cubo geográfico vacío
   const cubo = construirMiaSucia(capas);
 
-  // 6. Adaptar capas → tramos HA–JL
+  // 6. Adaptar capas → tramos reales
   const capasConTramos = adaptarCapasATramos(capas);
 
-  // 7. Inyectar tramos en el cubo
+  // 7. Inyectar tramos en el cubo soberano
   cubo.capas.BASE.tramos = capasConTramos.BASE.tramos;
-  cubo.capas.ACMP.tramos = capasConTramos.ACMP.tramos;
-  cubo.capas.TRSH.tramos = capasConTramos.TRSH.tramos;
+  cubo.capas.ACOMPANAMIENTO.tramos = capasConTramos.ACOMPANAMIENTO.tramos;
+  cubo.capas.RUIDO.tramos = capasConTramos.RUIDO.tramos;
 
   // 8. Totales derivados
   const totalNotas = notasClasificadas.length;
   const totalTramos =
     cubo.capas.BASE.tramos.length +
-    cubo.capas.ACMP.tramos.length +
-    cubo.capas.TRSH.tramos.length;
+    cubo.capas.ACOMPANAMIENTO.tramos.length +
+    cubo.capas.RUIDO.tramos.length;
 
-  // 9. Ensamblar contrato MIA SUCIA v1.0 (versión SUPREMO)
+  // 9. Ensamblar contrato MIA SUCIA v1.0
   const miaSucia: MiaSucia = {
     version: "1.0",
     cubo,
@@ -51,10 +52,8 @@ export async function procesarMIDI(
     totalTramos
   };
 
-  // 10. Validación constitucional (lanza si inválido)
-  const sello = validarMiaSucia(miaSucia);
-  // sello puede usarse para logging o auditoría
-  // console.debug("Aduana sello:", sello);
+  // 10. Validación constitucional
+  validarMiaSucia(miaSucia);
 
   // 11. Ministerio Exterior
   const transportador = new TransportadorA();

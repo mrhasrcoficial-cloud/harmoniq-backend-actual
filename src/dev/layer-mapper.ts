@@ -28,34 +28,34 @@ import type {
 //  Ministerio de Capas — Función oficial
 // -------------------------------------------------------------
 export function layerMapper(notes: MiaSuciaNote[]): MiaSuciaCapas {
-  const base: MiaSuciaNote[] = [];
-  const acompanamiento: MiaSuciaNote[] = [];
-  const ruido: MiaSuciaNote[] = [];
+  const BASE: MiaSuciaNote[] = [];
+  const ACOMPANAMIENTO: MiaSuciaNote[] = [];
+  const RUIDO: MiaSuciaNote[] = [];
 
   for (const n of notes) {
     const role: MiaNotaRol = n.role;
 
     switch (role) {
       case "base":
-        base.push(n);
+        BASE.push(n);
         break;
 
       case "acompanamiento":
-        acompanamiento.push(n);
+        ACOMPANAMIENTO.push(n);
         break;
 
       case "ruido":
-        ruido.push(n);
+        RUIDO.push(n);
         break;
 
       default: {
         // Blindaje constitucional:
         // Cualquier rol desconocido se considera ruido superficial.
-        ruido.push(n);
+        RUIDO.push(n);
         break;
       }
     }
   }
 
-  return { base, acompanamiento, ruido };
+  return { BASE, ACOMPANAMIENTO, RUIDO };
 }

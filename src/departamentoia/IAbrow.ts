@@ -30,7 +30,7 @@ export class IAbrow {
 
   // Convertir BackendMidiNote → MiaSuciaNote
   private etiquetar(notes: BackendMidiNote[]): MiaSuciaNote[] {
-    return notes.map(n => {
+    return notes.map<MiaSuciaNote>(n => {
       const role = this.clasificarNota(n);
 
       return {
@@ -66,8 +66,8 @@ export function IAbrow_clasificarCapas(
   notes: MiaSuciaNote[]
 ): MiaSuciaCapas {
   return {
-    base: notes.filter(n => n.role === "base"),
-    acompanamiento: notes.filter(n => n.role === "acompanamiento"),
-    ruido: notes.filter(n => n.role === "ruido")
+    BASE: notes.filter(n => n.role === "base"),
+    ACOMPANAMIENTO: notes.filter(n => n.role === "acompanamiento"),
+    RUIDO: notes.filter(n => n.role === "ruido")
   };
 }

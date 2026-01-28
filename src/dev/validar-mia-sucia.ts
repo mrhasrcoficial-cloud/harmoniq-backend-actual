@@ -21,7 +21,8 @@ export function validarMiaSucia(obj: any): obj is MiaSucia {
   const capas = cubo.capas;
   if (!capas || typeof capas !== "object") return false;
 
-  const nombres = ["BASE", "ACMP", "TRSH"] as const;
+  // ⭐ Nuevo idioma constitucional
+  const nombres = ["BASE", "ACOMPANAMIENTO", "RUIDO"] as const;
 
   for (const nombre of nombres) {
     const capa = capas[nombre];

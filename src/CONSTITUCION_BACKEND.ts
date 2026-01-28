@@ -22,7 +22,7 @@ Backend no asigna alturas musicales reales: usa alturas HA–JL constitucionales
 
 ✔ Backend construye exclusivamente:
 - El cubo geográfico MIA SUCIA v1.0
-- Con capas soberanas: BASE / ACMP / TRSH
+- Con capas soberanas: BASE / ACOMPANAMIENTO / RUIDO
 - Con tramos PMSmia (altura HA–JL, inicio 0–127, fin 0–127)
 
 TÍTULO I — PROPÓSITO DEL BACKEND
@@ -116,7 +116,7 @@ Archivos:
 - layer-mapper.ts
 Función:
 - Construir el cubo geográfico MIA SUCIA v1.0
-- Usar capas soberanas BASE / ACMP / TRSH
+- Usar capas soberanas BASE / ACOMPANAMIENTO / RUIDO
 - Validar superficialmente
 - Convertir MIDI → notas físicas
 - No corregir
@@ -174,7 +174,7 @@ Backend tiene prohibido:
 TÍTULO VI — PROCESO OFICIAL MIA SUCIA (1.4.1)
 
 1. Entrada
-- Express recibe MIDI en base64
+- Express recibe MIDI en binario o base64
 - Se convierte a Uint8Array
 
 2. IA‑MIA
@@ -185,7 +185,7 @@ TÍTULO VI — PROCESO OFICIAL MIA SUCIA (1.4.1)
 3. MIA Builder
 - construirMiaSucia(capas) → crea el cubo geográfico MIA SUCIA v1.0
 - adaptarCapasATramos → genera tramos HA–JL
-- Inyección soberana en BASE / ACMP / TRSH
+- Inyección soberana en BASE / ACOMPANAMIENTO / RUIDO
 - validarMiaSucia → valida el contrato final
 - empaquetador → opcionalmente escribe archivo
 - desempaquetador → lectura inversa
