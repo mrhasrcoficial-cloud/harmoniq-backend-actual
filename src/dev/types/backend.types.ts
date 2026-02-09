@@ -33,8 +33,11 @@ export interface MiaSuciaNote extends BackendMidiNote {
   tags: string[];
   inScale: boolean;
   valid: boolean;
-}
 
+  // Campos que YA vienen en el payload real:
+  channel: number;      // ← EXISTE en tu JSON real
+  trackIndex: number;   // ← ya existe en BackendMidiNote
+}
 // ─────────────────────────────────────────────
 // 4. Capas superficiales previas al cubo
 // ─────────────────────────────────────────────
