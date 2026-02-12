@@ -10,9 +10,12 @@ import { validarMiaSucia } from "./aduana/aduana-mia-sucia.js";
 import { TransportadorA } from "./teletransportador-A.js";
 import { adaptarCapasATramos } from "./backend-adaptadores-tramos/adaptador-tramos.js";
 
+// ⭐ Nuevo: análisis musical optimizado
+import { generarAnalisisMusical } from "./dev/analisis-musical.js";
+
 export async function procesarMIDI(
   midiBuffer: Uint8Array | ArrayBuffer
-): Promise<MiaSucia> {
+): Promise<MiaSucia & { analisisMusical: any }> {
 
   // 1. Normalizar buffer
   const buffer =
@@ -21,13 +24,13 @@ export async function procesarMIDI(
   // 2. Ingesta física
   const { notes, bpm, ppq, duracion } = ingestMidi(buffer);
 
-  // 3. Clasificación superficial IA‑MIA (roles + tags + validación)
+  // 3. Clasificación superficial IA‑MIA
   const notasClasificadas = IAbrow_clasificarNotas(notes);
 
-  // 4. Capas constitucionales (BASE / ACOMPANAMIENTO / RUIDO)
+  // 4. Capas constitucionales
   const capas = IAbrow_clasificarCapas(notasClasificadas);
 
-  // 5. Construcción del cubo geográfico vacío (sin tramos)
+  // 5. Construcción del cubo geográfico vacío
   const cubo = construirMiaSucia(capas);
 
   // 6. Adaptar capas → tramos reales
@@ -56,10 +59,19 @@ export async function procesarMIDI(
     totalTramos
   };
 
+  // ⭐ 9.5 Generar análisis musical optimizado (Camino B)
+  const analisisMusical = generarAnalisisMusical(miaSucia);
+
   // 10. Validación constitucional
   validarMiaSucia(miaSucia);
 
   // 11. Ministerio Exterior (salida final)
   const transportador = new TransportadorA();
-  return transportador.enviar(miaSucia);
+  const miaFinal = transportador.enviar(miaSucia);
+
+  // ⭐ 12. Devolver MIA SUCIA + análisis musical
+  return {
+    ...miaFinal,
+    analisisMusical
+  };
 }

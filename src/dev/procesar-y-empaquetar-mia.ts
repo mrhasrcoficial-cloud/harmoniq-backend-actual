@@ -11,10 +11,13 @@ import { empaquetarMiaSucia } from "./empaquetador-mia-sucia.js";
 import type { MiaSucia } from "../contracts/mia-sucia.contract.js";
 import { validarMiaSucia } from "./validar-mia-sucia.js";
 
+// ⭐ Nuevo módulo CAMINO B
+import { generarAnalisisMusical } from "./analisis-musical.js";
+
 export async function procesarYEmpaquetarMia(
   midiBuffer: Uint8Array | ArrayBuffer,
   outputPath?: string
-): Promise<MiaSucia> {
+): Promise<MiaSucia & { analisisMusical: any }> {
 
   // 1. Ingestar MIDI físico
   const { notes, bpm, ppq, duracion } = ingestMidi(midiBuffer);
@@ -40,6 +43,9 @@ export async function procesarYEmpaquetarMia(
     cubo
   };
 
+  // ⭐ 4.5 Generar análisis musical clásico (CAMINO B)
+  const analisisMusical = generarAnalisisMusical(mia);
+
   // 5. Validar contrato
   if (!validarMiaSucia(mia)) {
     throw new Error("❌ El pipeline no devolvió un objeto MiaSucia válido.");
@@ -50,6 +56,9 @@ export async function procesarYEmpaquetarMia(
     empaquetarMiaSucia(mia, outputPath);
   }
 
-  // 7. Devolver contrato soberano
-  return mia;
+  // 7. Devolver contrato soberano + análisis musical
+  return {
+    ...mia,
+    analisisMusical
+  };
 }
