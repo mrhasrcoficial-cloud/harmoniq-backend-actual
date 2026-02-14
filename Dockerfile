@@ -1,39 +1,28 @@
 # -------------------------------------------------------------
-#  ETAPA 1 — BUILDER (compila TypeScript)
+#  ETAPA 1 — BUILDER (compila TypeScript del backend)
 # -------------------------------------------------------------
 FROM node:18 AS builder
 
-WORKDIR /app
+WORKDIR /app/backend
 
-# Copiar solo package.json + lock
-COPY package*.json ./
-
-# Instalar dependencias (incluye TypeScript)
+COPY backend/package*.json ./
 RUN npm ci
 
-# Copiar el resto del código
-COPY . .
-
-# Compilar TypeScript → dist/
+COPY backend ./
 RUN npx tsc -p .
 
 # -------------------------------------------------------------
-#  ETAPA 2 — RUNNER (imagen final, limpia y soberana)
+#  ETAPA 2 — RUNNER (imagen final)
 # -------------------------------------------------------------
 FROM node:18-slim
 
-WORKDIR /app
+WORKDIR /app/backend
 
 ENV NODE_ENV=production
 
-# Copiar solo node_modules de producción
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/backend/dist ./dist
+COPY backend/package*.json ./
 
-# Copiar dist compilado
-COPY --from=builder /app/dist ./dist
+RUN npm ci --omit=dev
 
-# Copiar cualquier archivo necesario en runtime (si aplica)
-COPY package*.json ./
-
-# Ejecutar servidor soberano
 CMD ["node", "dist/server.js"]
