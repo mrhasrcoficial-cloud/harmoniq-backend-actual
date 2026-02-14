@@ -5,7 +5,7 @@
 //  NO muta notas
 // -------------------------------------------------------------
 
-import type { MiaSuciaNote, MiaSuciaCapas } from "../dev/types/backend.types.js";
+import type { MiaSuciaNote, MiaSuciaCapas } from "./types/backend.types.js";
 
 // -------------------------------------------------------------
 //  1. BASE — notas fundamentales (root notes)

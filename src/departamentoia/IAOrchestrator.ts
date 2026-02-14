@@ -24,7 +24,7 @@ import type { NotaEvaluada } from "./IAEvaluator.js";
 import { noiseFilterIA } from "./noise-filter-ia.js";
 import { evaluarNotas } from "./IAEvaluator.js";
 import { IAbrow_clasificarNotas } from "./IAbrow.js";
-import { layerMapper } from "../dev/layer-mapper.js";
+import { layerMapper } from "../dev/layer-mapper-dev.js";
 
 export class IAOrchestrator {
   run(notes: InternalMidiNote[]): MiaSuciaCapas {
