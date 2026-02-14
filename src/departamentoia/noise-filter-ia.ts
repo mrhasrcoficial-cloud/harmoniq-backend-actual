@@ -1,14 +1,11 @@
 // backend/src/departamentoia/noise-filter-ia.ts
 // -------------------------------------------------------------
 //  NoiseFilter-IA — Etiquetador superficial constitucional
-//  Versión 2.1 (NO elimina, NO transforma, NO produce MiaSuciaNote)
-//  Alineado a SUPREMO: roles soberanos BASE / ACOMPANAMIENTO / RUIDO
+//  Versión 2.2 (NO elimina, NO transforma, NO produce MiaSuciaNote)
+//  Alineado a SUPREMO: NO asigna roles soberanos
 // -------------------------------------------------------------
 
-import type {
-  BackendMidiNote,
-  MiaNotaRol
-} from "../dev/types/backend.types.js";
+import type { InternalMidiNote } from "../dev/types/backend.types.js";
 
 const IA_DICTIONARY = {
   tags: {
@@ -37,13 +34,11 @@ export const DEFAULT_NOISE_FILTER_CONFIG: NoiseFilterConfig = {
   maxPitch: 120
 };
 
-// ⭐ Devuelve BackendMidiNote enriquecido, NO MiaSuciaNote
+// ⭐ Devuelve InternalMidiNote enriquecido, NO MiaSuciaNote, NO role
 export function noiseFilterIA(
-  notes: BackendMidiNote[],
+  notes: InternalMidiNote[],
   config: NoiseFilterConfig = DEFAULT_NOISE_FILTER_CONFIG
-): (BackendMidiNote & {
-  role: MiaNotaRol;
-  inScale: boolean;
+): (InternalMidiNote & {
   valid: boolean;
   tags: string[];
 })[] {
@@ -107,33 +102,12 @@ export function noiseFilterIA(
       tags.push(IA_DICTIONARY.tags.CLEAN);
     }
 
-    // ⭐ Rol superficial soberano (NO definitivo)
-    const role: MiaNotaRol = valid ? inferRole(n) : "RUIDO";
-
     result.push({
       ...n,
-      role,
-      inScale: role !== "RUIDO",
       valid,
       tags
     });
   }
 
   return result;
-}
-
-// -------------------------------------------------------------
-//  INFERENCIA SUPERFICIAL DE ROL (SOBERANA)
-// -------------------------------------------------------------
-function inferRole(n: BackendMidiNote): MiaNotaRol {
-  const pc = n.pitchClass;
-
-  // BASE (grados fuertes)
-  if (pc === 0 || pc === 5 || pc === 7) return "BASE";
-
-  // ACOMPANAMIENTO (rango melódico típico)
-  if (n.pitch >= 40 && n.pitch <= 90) return "ACOMPANAMIENTO";
-
-  // RUIDO (todo lo demás)
-  return "RUIDO";
 }

@@ -1,13 +1,13 @@
 // ============================================================
 //  backend/src/dev/types/backend.types.ts
-//  Tipos oficiales del país Backend (Constitución 2.1)
+//  Tipos oficiales del país Backend (Constitución 2.2)
 //  Alineado al contrato SUPREMO y al backend real
 // ============================================================
 
 // ─────────────────────────────────────────────
-// 1. Nota MIDI cruda (ingesta física)
+// 1. Nota MIDI cruda (ingesta física interna)
 // ─────────────────────────────────────────────
-export interface BackendMidiNote {
+export interface InternalMidiNote {
   id: string;
   trackIndex: number;
   pitch: number;
@@ -16,14 +16,13 @@ export interface BackendMidiNote {
   velocity: number;
   pitchClass: number;
 
-  // ⭐ Restaurado: channel sí existe en la arquitectura 2.0
+  // ⭐ channel sí existe en la arquitectura 2.0
   channel: number;
 }
 
 // ─────────────────────────────────────────────
-// 2. Rol superficial IA‑MIA (SOBERANO)
+// 2. Rol superficial IA‑MIA (SOBERANO interno)
 // ─────────────────────────────────────────────
-// ⭐ Alineado a SUPREMO: nombres constitucionales
 export type MiaNotaRol =
   | "BASE"
   | "ACOMPANAMIENTO"
@@ -32,7 +31,7 @@ export type MiaNotaRol =
 // ─────────────────────────────────────────────
 // 3. Nota MIA SUCIA (clasificada superficialmente)
 // ─────────────────────────────────────────────
-export interface MiaSuciaNote extends BackendMidiNote {
+export interface MiaSuciaNote extends InternalMidiNote {
   role: MiaNotaRol;
   tags: string[];
   inScale: boolean;

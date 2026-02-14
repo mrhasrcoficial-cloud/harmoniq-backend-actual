@@ -1,18 +1,17 @@
 // backend/src/dev/mia-sucia-final.builder.ts
 // -------------------------------------------------------------
-//  CONSTRUCTOR FINAL MIA SUCIA — Constitución 2.1
+//  CONSTRUCTOR FINAL MIA SUCIA — Constitución 2.2
 //  Alineado al pipeline soberano (notas → capas → tramos → cubo)
 // -------------------------------------------------------------
 
-import type { BackendMidiNote } from "./types/backend.types.js";
-import type { MiaSuciaCapas } from "./types/backend.types.js";
+import type { InternalMidiNote, MiaSuciaCapas } from "./types/backend.types.js";
 
 import { IAOrchestrator } from "../departamentoia/IAOrchestrator.js";
 import { adaptarCapasATramos } from "../backend-adaptadores-tramos/adaptador-tramos.js";
 import { construirMiaSucia as construirCubo } from "./constructor-mia-sucia.js";
 
 interface DatosMiaFinal {
-  notes: BackendMidiNote[];
+  notes: InternalMidiNote[];
   bpm: number;
   ppq: number;
   duracion: number;
@@ -35,7 +34,7 @@ export function construirMiaSuciaFinal({
   // ⭐ 3. Construir cubo soberano (con TRAMOS)
   const cubo = construirCubo(capasConTramos);
 
-  // ⭐ 4. Construir contrato MIA SUCIA v1.0
+  // ⭐ 4. Devolver estructura interna (NO contrato final)
   return {
     version: "1.0",
     bpmDetectado: bpm,

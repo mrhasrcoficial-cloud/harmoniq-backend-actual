@@ -1,30 +1,35 @@
-// backend/src/contracts/mia-sucia.contract.ts
 // -------------------------------------------------------------
-//  CONTRATO MIA SUCIA — Versión 1.0 (Alineado a SUPREMO)
+//  CONTRATO MIA SUCIA — Versión 1.0 (Alineado a SUPREMO 2.2)
+//  Fuente soberana para SRC → SUPREMO → CRUZ → ARKLIM
 // -------------------------------------------------------------
 
 import type { MiaCubo } from "../dev/types/mia.types.js";
 
 // -------------------------------------------------------------
 //  Notas reales del MIDI físico (salida directa de ingestMidi)
+//  + rol soberano asignado por IA-MIA
 // -------------------------------------------------------------
-export interface BackendMidiNote {
+export interface ContractMidiNote {
   pitch: number;
   startTime: number;
   duration: number;
   velocity: number;
   trackIndex: number;
   channel: number;
+
+  /** Rol soberano asignado por IA-MIA */
+  role: "BASE" | "ACOMPANAMIENTO" | "RUIDO";
 }
 
 // -------------------------------------------------------------
 //  CONTRATO MIA SUCIA (Versión 1.0)
+//  La verdad oficial del sistema
 // -------------------------------------------------------------
 export interface MiaSucia {
   /** Versión del contrato */
   version: "1.0";
 
-  /** Cubo geográfico MIA SUCIA v1.0 (BASE / ACOMPANAMIENTO / RUIDO) */
+  /** Cubo geográfico MIA SUCIA v1.0 (vista por tramos) */
   cubo: MiaCubo;
 
   /** Metadata física mínima requerida por SUPREMO */
@@ -36,16 +41,19 @@ export interface MiaSucia {
   totalNotas?: number;
   totalTramos?: number;
 
-  /** ⭐ Notas reales del MIDI físico (sin clasificar, sin alterar) */
-  notasOriginales: BackendMidiNote[];
+  /** ⭐ Notas reales del MIDI físico (sin alterar) */
+  notasOriginales: ContractMidiNote[];
+
+  /** ⭐ Notas reales clasificadas por capa (agrupación directa) */
+  notasPorCapa: {
+    BASE: ContractMidiNote[];
+    ACOMPANAMIENTO: ContractMidiNote[];
+    RUIDO: ContractMidiNote[];
+  };
 }
 
 // -------------------------------------------------------------
-//  ADAPTADOR: PMSmiaTramo → MidiNote (para SRC y SUPREMO)
-// -------------------------------------------------------------
-//  ⭐ NO incluimos channel (tu arquitectura 1.0 y 2.0 no lo usa)
-//  ⭐ trackIndex sigue siendo el mapa soberano de capas
-//  ⭐ velocity fija es constitucional en este adaptador
+//  ADAPTADOR: PMSmiaTramo → MidiNote (solo para vistas geográficas)
 // -------------------------------------------------------------
 export function tramoToMidiNote(t: any) {
   return {

@@ -1,7 +1,8 @@
 // -------------------------------------------------------------
-//  LayerMapper — Versión Constitucional 3.1
-//  Reconstrucción soberana de BASE / ACOMPANAMIENTO / RUIDO
-//  Alineado a SUPREMO 2.2.0 y MiaSucia 1.0
+//  LayerMapper — Versión Constitucional 3.2
+//  Calibración fina de BASE / ACOMPANAMIENTO / RUIDO
+//  NO reasigna roles soberanos
+//  NO muta notas
 // -------------------------------------------------------------
 
 import type { MiaSuciaNote, MiaSuciaCapas } from "../dev/types/backend.types.js";
@@ -13,10 +14,8 @@ function esNotaBase(n: MiaSuciaNote, todas: MiaSuciaNote[]): boolean {
   const pitches = todas.map(x => x.pitch);
   const minPitch = Math.min(...pitches);
 
-  // Notas más graves → base
   if (n.pitch <= minPitch + 5) return true;
 
-  // Repetición cíclica → base
   const repeticiones = todas.filter(x => x.pitch === n.pitch).length;
   if (repeticiones >= 3) return true;
 
@@ -31,7 +30,6 @@ function esAcompanamiento(n: MiaSuciaNote, todas: MiaSuciaNote[]): boolean {
   const minPitch = Math.min(...pitches);
   const maxPitch = Math.max(...pitches);
 
-  // Rango medio → acompañamiento
   if (n.pitch > minPitch + 5 && n.pitch < maxPitch - 5) return true;
 
   return false;
@@ -41,16 +39,10 @@ function esAcompanamiento(n: MiaSuciaNote, todas: MiaSuciaNote[]): boolean {
 //  3. RUIDO — micro-notas, aisladas, fuera de escala
 // -------------------------------------------------------------
 function esRuido(n: MiaSuciaNote, todas: MiaSuciaNote[]): boolean {
-  // micro-notas
   if (n.duration < 0.02) return true;
-
-  // velocity muy baja
   if (n.velocity < 10) return true;
-
-  // pitch fuera de rango musical
   if (n.pitch < 15 || n.pitch > 120) return true;
 
-  // nota aislada (ventana contextual ampliada)
   const vecinos = todas.filter(
     m =>
       m !== n &&
@@ -74,27 +66,23 @@ export function layerMapper(notes: MiaSuciaNote[]): MiaSuciaCapas {
   for (const n of notes) {
     // 1) RUIDO físico o contextual
     if (esRuido(n, notes)) {
-      n.role = "RUIDO";
       RUIDO.push(n);
       continue;
     }
 
     // 2) BASE — notas fundamentales
     if (esNotaBase(n, notes)) {
-      n.role = "BASE";
       BASE.push(n);
       continue;
     }
 
     // 3) ACOMPANAMIENTO — rango medio
     if (esAcompanamiento(n, notes)) {
-      n.role = "ACOMPANAMIENTO";
       ACOMPANAMIENTO.push(n);
       continue;
     }
 
     // 4) Fallback seguro → acompañamiento
-    n.role = "ACOMPANAMIENTO";
     ACOMPANAMIENTO.push(n);
   }
 

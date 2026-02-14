@@ -1,8 +1,7 @@
-// backend/src/dev/analisis-musical.ts
 // -------------------------------------------------------------
 //  Análisis Musical Optimizado — Camino B (Producción)
 //  Traduce MIA SUCIA → tempo, tonalidad, notas, acordes
-//  Constitución 2.1 (usa pitch MIDI real, no HA–JL)
+//  Constitución 2.2 (usa notas reales de MiaSucia, no tramos)
 // -------------------------------------------------------------
 
 import type { MiaSucia } from "../contracts/mia-sucia.contract.js";
@@ -36,19 +35,29 @@ const ESCALAS_MAYORES: Record<string, number[]> = {
 export function generarAnalisisMusical(mia: MiaSucia): AnalisisMusical {
   const tempo = mia.bpmDetectado;
 
-  // 1. Extraer tramos BASE
-  const base = mia.cubo.capas.BASE.tramos;
+  // -------------------------------------------------------------
+  // ⭐ 1. Extraer notas BASE reales (no tramos)
+  // -------------------------------------------------------------
+  const base = mia.notasPorCapa.BASE;
 
-  // 2. Convertir pitch MIDI → pitch class
-  const pcs = base.map(t => t.pitch % 12);
+  // -------------------------------------------------------------
+  // ⭐ 2. Convertir pitch MIDI → pitch class
+  // -------------------------------------------------------------
+  const pcs = base.map(n => n.pitch % 12);
 
-  // 3. Convertir a nombres musicales
+  // -------------------------------------------------------------
+  // ⭐ 3. Convertir a nombres musicales
+  // -------------------------------------------------------------
   const notas = pcs.map(pc => PC[pc]);
 
-  // 4. Detectar tonalidad
+  // -------------------------------------------------------------
+  // ⭐ 4. Detectar tonalidad (basado en notas reales)
+  // -------------------------------------------------------------
   const tonalidad = detectarTonalidad(pcs);
 
-  // 5. Detectar acordes
+  // -------------------------------------------------------------
+  // ⭐ 5. Detectar acordes (triadas simples)
+  // -------------------------------------------------------------
   const acordes = detectarAcordes(pcs);
 
   return {

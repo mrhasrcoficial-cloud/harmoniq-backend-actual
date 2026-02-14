@@ -1,16 +1,17 @@
 // backend/src/dev/midi-ingestor.ts
 // -------------------------------------------------------------
-//  MIDI INGESTOR — País Backend (Constitución 2.1)
+//  MIDI INGESTOR — País Backend (Constitución 2.2)
+//  Fuente física soberana de notas reales (tipos internos)
 // -------------------------------------------------------------
 
-import type { BackendMidiNote } from "../dev/types/backend.types.js";
+import type { InternalMidiNote } from "../dev/types/backend.types.js";
 import MidiPkg from "@tonejs/midi";
 const { Midi } = MidiPkg;
 
 export function ingestMidi(
   buffer: Uint8Array | ArrayBuffer
 ): {
-  notes: BackendMidiNote[];
+  notes: InternalMidiNote[];
   bpm: number;
   ppq: number;
   duracion: number;
@@ -25,7 +26,7 @@ export function ingestMidi(
     return { notes: [], bpm: 120, ppq: 480, duracion: 0 };
   }
 
-  const notes: BackendMidiNote[] = [];
+  const notes: InternalMidiNote[] = [];
 
   midi.tracks.forEach((track: any, trackIndex: number) => {
     track.notes.forEach((n: any, idx: number) => {
@@ -37,8 +38,6 @@ export function ingestMidi(
         duration: n.duration,
         velocity: n.velocity,
         pitchClass: n.midi % 12,
-
-        // ⭐ CORRECCIÓN FUNDAMENTAL
         channel: n.channel ?? 0
       });
     });
