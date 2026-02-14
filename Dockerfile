@@ -3,12 +3,18 @@
 # -------------------------------------------------------------
 FROM node:18 AS builder
 
+WORKDIR /app
+
+# Copiar todo el repo
+COPY . .
+
+# Entrar a backend
 WORKDIR /app/backend
 
-COPY backend/package*.json ./
+# Instalar dependencias del backend
 RUN npm ci
 
-COPY backend ./
+# Compilar TypeScript
 RUN npx tsc -p .
 
 # -------------------------------------------------------------
@@ -20,9 +26,13 @@ WORKDIR /app/backend
 
 ENV NODE_ENV=production
 
+# Copiar dist compilado
 COPY --from=builder /app/backend/dist ./dist
+
+# Copiar package.json del backend
 COPY backend/package*.json ./
 
+# Instalar dependencias de producción
 RUN npm ci --omit=dev
 
 CMD ["node", "dist/server.js"]
