@@ -46,7 +46,7 @@ function esRuido(n: MiaSuciaNote, todas: MiaSuciaNote[]): boolean {
   const vecinos = todas.filter(
     m =>
       m !== n &&
-      Math.abs(m.startTime - n.startTime) < 1.0 &&
+      Math.abs(m.startTime - n.startTime) <= 1.0 &&   // ⭐ CORRECCIÓN CONSTITUCIONAL
       Math.abs(m.pitch - n.pitch) < 4
   );
 
