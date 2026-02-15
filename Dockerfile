@@ -3,14 +3,10 @@
 # -------------------------------------------------------------
 FROM node:18 AS builder
 
-# Carpeta raíz del contenedor
 WORKDIR /app
 
-# Copiar SOLO el backend soberano
-COPY backend ./backend
-
-# Entrar al backend soberano
-WORKDIR /app/backend
+# Copiar TODO el backend soberano
+COPY . .
 
 # Instalar dependencias
 RUN npm ci
@@ -23,15 +19,15 @@ RUN npx tsc -p tsconfig.json
 # -------------------------------------------------------------
 FROM node:18-slim
 
-WORKDIR /app/backend
+WORKDIR /app
 
 ENV NODE_ENV=production
 
 # Copiar dist compilado
-COPY --from=builder /app/backend/dist ./dist
+COPY --from=builder /app/dist ./dist
 
-# Copiar package.json del backend
-COPY backend/package*.json ./
+# Copiar package.json y lock
+COPY package*.json ./
 
 # Instalar dependencias de producción
 RUN npm ci --omit=dev
