@@ -1,9 +1,8 @@
 # -------------------------------------------------------------
-#  ETAPA 1 — BUILDER (compila TypeScript del backend)
+# ETAPA 1 — BUILDER
 # -------------------------------------------------------------
 FROM node:18 AS builder
 
-# Carpeta de trabajo raíz
 WORKDIR /app
 
 # Copiar TODO el repo
@@ -15,11 +14,11 @@ WORKDIR /app/backend
 # Instalar dependencias del backend
 RUN npm ci
 
-# Compilar TypeScript usando el tsconfig correcto
-RUN npx tsc -p /app/backend/tsconfig.json
+# Compilar TypeScript usando el tsconfig de esta carpeta
+RUN npx tsc -p .
 
 # -------------------------------------------------------------
-#  ETAPA 2 — RUNNER (imagen final, limpia)
+# ETAPA 2 — RUNNER (imagen final, limpia)
 # -------------------------------------------------------------
 FROM node:18-slim
 
