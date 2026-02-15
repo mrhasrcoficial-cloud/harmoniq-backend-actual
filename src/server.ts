@@ -4,7 +4,16 @@ import cors from "cors";
 import { procesarYEmpaquetarMia } from "./dev/procesar-y-empaquetar-mia.js";
 
 const app = express();
-app.use(cors());
+
+// ⭐ CORS SOBERANO — necesario para Railway
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+}));
+
+// ⭐ Responder preflight OPTIONS
+app.options("*", cors());
 
 // Mantener JSON para compatibilidad (no usar para archivos grandes)
 app.use(express.json({ limit: "50mb" }));
@@ -22,13 +31,11 @@ app.post("/mia-binary", async (req, res) => {
       return res.status(400).json({ error: "Body binario vacío" });
     }
 
-    // Convertir a Uint8Array para el pipeline
     const buffer = new Uint8Array(body);
     console.log("📥 /mia-binary recibido bytes:", buffer.length);
 
     const mia = await procesarYEmpaquetarMia(buffer);
 
-    // ⭐ LOG SOBERANO — Qué se está enviando
     console.log("📤 Enviando MIA SUCIA:");
     console.log("   - version:", mia.version);
     console.log("   - bpmDetectado:", mia.bpmDetectado);
@@ -61,7 +68,6 @@ app.post("/mia", async (req, res) => {
 
     const mia = await procesarYEmpaquetarMia(buffer);
 
-    // ⭐ LOG SOBERANO — Qué se está enviando
     console.log("📤 Enviando MIA SUCIA:");
     console.log("   - version:", mia.version);
     console.log("   - bpmDetectado:", mia.bpmDetectado);
