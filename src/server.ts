@@ -5,15 +5,15 @@ import { procesarYEmpaquetarMia } from "./dev/procesar-y-empaquetar-mia.js";
 
 const app = express();
 
-// ⭐ CORS SOBERANO — necesario para Railway
+// ⭐ CORS SOBERANO — compatible con Express 5 y Railway
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
 }));
 
-// ⭐ Responder preflight OPTIONS
-app.options("*", cors());
+// ⭐ Preflight OPTIONS — Express 5 NO acepta "*" → usamos "/*"
+app.options("/*", cors());
 
 // Mantener JSON para compatibilidad (no usar para archivos grandes)
 app.use(express.json({ limit: "50mb" }));
