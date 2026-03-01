@@ -12,8 +12,9 @@ app.use(cors({
   allowedHeaders: ["Content-Type"],
 }));
 
-// ⭐ Preflight OPTIONS — Express 5 NO acepta "*" → usamos "/*"
-app.options("/*", cors());
+// ⭐ Preflight OPTIONS — Express 5 SOLO acepta rutas reales
+app.options("/mia-binary", cors());
+app.options("/mia", cors());
 
 // Mantener JSON para compatibilidad (no usar para archivos grandes)
 app.use(express.json({ limit: "50mb" }));
